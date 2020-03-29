@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Hotel {
-	private static Hotel hetHotel;
+    private static Hotel hetHotel;
 	public static void setHotel(Hotel hotel) {
 		hetHotel = hotel;
 	}

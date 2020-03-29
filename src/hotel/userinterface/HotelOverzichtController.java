@@ -1,15 +1,27 @@
 package hotel.userinterface;
 
+import hotel.model.Boeking;
 import hotel.model.Hotel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class HotelOverzichtController {
     @FXML private Label hotelnaamLabel;
@@ -34,8 +46,14 @@ public class HotelOverzichtController {
         overzichtDatePicker.setValue(dagLater);
     }
 
-    public void nieuweBoeking(ActionEvent actionEvent) {
-        System.out.println("nieuweBoeking() is nog niet geïmplementeerd!");
+    public void nieuweBoeking(ActionEvent actionEvent) throws Exception{
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Boekingen.fxml"));   Parent root = loader.load();
+        Stage newStage = new Stage();
+        newStage.setScene(new Scene(root));
+        newStage.initModality(Modality.APPLICATION_MODAL);
+        newStage.showAndWait();
+        initialize();
 
         // Maak in je project een nieuwe FXML-pagina om boekingen te kunnen invoeren
         // Open de nieuwe pagina in deze methode
@@ -44,10 +62,27 @@ public class HotelOverzichtController {
     }
 
     public void toonBoekingen() {
-        System.out.println("toonBoekingen() is nog niet geïmplementeerd!");
         ObservableList<String> boekingen = FXCollections.observableArrayList();
 
-        // Vraag de boekingen op bij het Hotel-object.
+        //boekingen.add(Boeking.getAankomstDatum);
+        for (Boeking boeking : hotel.getBoekingen()){
+            if (overzichtDatePicker.getValue().isEqual(boeking.getAankomstDatum())){
+//                DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+//                String strDate = dateFormat.format(boeking.getAankomstDatum());
+//                boekingen.add(strDate);
+                String aankomstString  = String.valueOf((boeking.getAankomstDatum()));
+                String vertrekString  = String.valueOf((boeking.getVertrekDatum()));
+
+                boekingen.add(aankomstString + vertrekString + boeking.getKamer() + boeking.getBoeker());
+
+
+            }
+
+
+        }
+
+
+                // Vraag de boekingen op bij het Hotel-object.
         // Voeg voor elke boeking in nette tekst (string) toe aan de boekingen-lijst.
 
         boekingenListView.setItems(boekingen);
