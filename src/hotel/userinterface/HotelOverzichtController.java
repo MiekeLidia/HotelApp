@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -46,7 +47,7 @@ public class HotelOverzichtController {
         overzichtDatePicker.setValue(dagLater);
     }
 
-    public void nieuweBoeking(ActionEvent actionEvent) throws Exception{
+    public void nieuweBoeking(ActionEvent actionEvent) throws IOException{
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Boekingen.fxml"));   Parent root = loader.load();
         Stage newStage = new Stage();

@@ -2,6 +2,7 @@ package hotel.userinterface;
 
 import hotel.model.Boeking;
 import hotel.model.Hotel;
+import hotel.model.Kamer;
 import hotel.model.KamerType;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -14,44 +15,57 @@ import java.util.List;
 public class BoekingenController {
 
 
-    public Label adres;
-    public TextField naam;
-    public DatePicker aankomst;
-    public DatePicker vertrek;
-    @FXML
-    private ComboBox comboBoxKamer;
-    public Button reset;
-    public Button boek;
-    private Hotel hotel = Hotel.getHotel();
+    @FXML public TextField adres;
+    @FXML public TextField naam;
+    @FXML public DatePicker aankomst;
+    @FXML public DatePicker vertrek;
+    @FXML public ComboBox<KamerType> kamer;
+    @FXML public Button reset;
+    @FXML public Button boek;
+    @FXML public Label message;
 
 
-//    private Hotel typen = Hotel.getKamerTypen();
-//
-//    public void initialize() {
-//
-//        comboBoxKamer.setItems(FXCollections.observableList(Hotel.getKamerTypen));
-//        public void aankomst(ActionEvent actionEvent) {
-//    }
-
-    public void vertrek(ActionEvent actionEvent) {
-    }
-
-    public void kamer(ActionEvent actionEvent) {
+    public void initialize() {
+        kamer.setItems(FXCollections.observableList(Hotel.getHotel().getKamerTypen()));
     }
 
     public void reset(ActionEvent actionEvent) {
+        naam.clear();
+        adres.clear();
+        aankomst.setValue(null);
+        vertrek.setValue(null);
+        kamer.setValue(null);
+        message.setText("Voer uw gegevens in");
+
     }
 
-    public void boek(ActionEvent actionEvent) {
-        if (naam != null && adres != null && aankomst != null && vertrek != null && comboBoxKamer != null){
-            LocalDate aankomstLD = aankomst.getValue();
-            String adresString = String.valueOf(adres);
-            //KamerType kamerType = KamerType.comboBoxKamer;
+    public void boek(ActionEvent actionEvent) throws Exception {
+        try{
+            if ( (!aankomst.getValue().isBefore(vertrek.getValue())) ||
+                    !(aankomst.getValue().isAfter(LocalDate.now())) ||
+                    !(vertrek.getValue().isAfter(LocalDate.now()))){
+                message.setText("de datum klopt niet, vul een geldige datum in");
+            }
+            else {
 
-            //Hotel.voegBoekingToe(aankomstLD,vertrek,naam,adresString,);
+                if (naam.getText() != null &&
+                        adres.getText() != null &&
+                        aankomst.getValue() != null &&
+                        vertrek.getValue() != null &&
+                        kamer.getValue() != null) {
+                    Hotel.getHotel().voegBoekingToe(aankomst.getValue(), vertrek.getValue(), naam.getText(), adres.getText(), kamer.getValue());
+                    message.setText("boekig is gelukt!");
+                }
+            }
 
+        }catch (Exception e){
+            message.setText("vul alle velden in");
         }
-        else {System.out.println("vull alle velden in");}
+
+
+
 
     }
+
+
 }
